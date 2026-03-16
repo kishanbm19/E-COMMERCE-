@@ -10,10 +10,11 @@ class Category(models.Model):
     
 
 class Product(models.Model):
-    id=models.IntegerField(primary_key=True,auto_created=True)
+
     title=models.CharField(null=False,max_length=200)
     price=models.FloatField(default=0)
-    description=models.TextField()
+    description=models.TextField(blank=True)
+    category=models.ForeignKey(Category,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
