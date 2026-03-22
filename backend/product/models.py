@@ -10,7 +10,7 @@ class Category(models.Model):
     
 
 class Product(models.Model):
-
+    id=models.IntegerField(auto_created=True,primary_key=True)
     title=models.CharField(null=False,max_length=200)
     price=models.FloatField(default=0)
     description=models.TextField(blank=True)
