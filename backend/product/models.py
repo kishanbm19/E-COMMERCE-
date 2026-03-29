@@ -15,6 +15,11 @@ class Product(models.Model):
     price=models.FloatField(default=0)
     description=models.TextField(blank=True)
     category=models.ForeignKey(Category,on_delete=models.CASCADE)
+    discount=models.IntegerField(default=0)
+    @property
+    def total_price(self):
+        return self.price-(self.discount*0.01*self.price)
+
 
     def __str__(self):
         return self.title
