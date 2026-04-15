@@ -9,10 +9,10 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
         fields="__all__"
     
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
-    total_price=serializers.ReadOnlyField()
+    final_price=serializers.ReadOnlyField()
     class Meta:
         model=Product
-        fields=['url','id','title','description','price','discount','total_price','category']
+        fields=['url','id','title','description','price','discount','final_price','category']
         read_only_fields=['id']
 
 
@@ -20,18 +20,25 @@ class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model=Cart
         fields="__all__"
+        
 
 class CartItemSerializer(serializers.ModelSerializer):
+    final_price=serializers.ReadOnlyField()
     class Meta:
         model=CartItem
-        fields="__all__"
+        fields="__all__" 
+       
 
 class OrderSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model=Order
         fields="__all__"
+        
 
 class OrderItemSerializer(serializers.ModelSerializer):
+    total_price=serializers.ReadOnlyField()
     class Meta:
         model=OrderItem
         fields="__all__"
+        read_only_fields=['total_price']

@@ -18,7 +18,7 @@ class Product(models.Model):
     category=models.ForeignKey(Category,on_delete=models.CASCADE)
     discount=models.IntegerField(default=0)
     @property
-    def total_price(self):
+    def final_price(self):
         return self.price-(self.discount*0.01*self.price)
 
 
@@ -36,9 +36,12 @@ class CartItem(models.Model):
     cart=models.ForeignKey(Cart,on_delete=models.CASCADE)
     quantity=models.IntegerField(default=1)
     product=models.ForeignKey(Product,on_delete=models.CASCADE)
-
+    
     def __str__(self):
         return f"Cartitems- {self.product.title} x {self.quantity}"
+    @property
+    def final_price(self):
+        return self.product.price*self.quantity
 
 class Order(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
@@ -48,13 +51,21 @@ class Order(models.Model):
     def __str__(self):
         return f"Order- {self.user}"
 
+   
+
 class OrderItem(models.Model):
     order=models.ForeignKey(Order,on_delete=models.CASCADE)
     product=models.ForeignKey(Product,on_delete=models.CASCADE)
     quantity=models.IntegerField(default=1)
+    discount=models.IntegerField(default=0)
 
     def __str__(self):
         return f"Orderitems- {self.product.title} x {self.quantity}"
+    
+    @property
+    def total_price(self):
+        return self.product.price*self.quantity
+    
     
 
 
