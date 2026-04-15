@@ -23,10 +23,12 @@ class CartSerializer(serializers.ModelSerializer):
         
 
 class CartItemSerializer(serializers.ModelSerializer):
-    final_price=serializers.ReadOnlyField()
+    total_price=serializers.ReadOnlyField()
+    Item = serializers.CharField(source='product.title', read_only=True)
     class Meta:
         model=CartItem
-        fields="__all__" 
+        fields=['cart','product','Item','quantity','total_price']
+        
        
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -38,7 +40,10 @@ class OrderSerializer(serializers.ModelSerializer):
 
 class OrderItemSerializer(serializers.ModelSerializer):
     total_price=serializers.ReadOnlyField()
+    final_price=serializers.ReadOnlyField()
+    Item=serializers.CharField(source='product.title',read_only=True)
     class Meta:
         model=OrderItem
-        fields="__all__"
-        read_only_fields=['total_price']
+        fields=['order','product','Item','quantity','total_price','discount','final_price']
+        read_only_fields=['total_price','final_price']
+        write_only_fields=['product']

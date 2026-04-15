@@ -17,7 +17,10 @@ class Product(models.Model):
     description=models.TextField(blank=True)
     category=models.ForeignKey(Category,on_delete=models.CASCADE)
     discount=models.IntegerField(default=0)
+    
     @property
+
+    
     def final_price(self):
         return self.price-(self.discount*0.01*self.price)
 
@@ -40,12 +43,12 @@ class CartItem(models.Model):
     def __str__(self):
         return f"Cartitems- {self.product.title} x {self.quantity}"
     @property
-    def final_price(self):
+    def total_price(self):
         return self.product.price*self.quantity
 
 class Order(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
-    total_amount=models.FloatField(default=0)
+    
     status=models.CharField(max_length=50)
 
     def __str__(self):
@@ -63,8 +66,13 @@ class OrderItem(models.Model):
         return f"Orderitems- {self.product.title} x {self.quantity}"
     
     @property
+
+
     def total_price(self):
         return self.product.price*self.quantity
+    
+    def final_price(self):
+        return self.total_price-(self.discount*0.01*self.total_price)
     
     
 
