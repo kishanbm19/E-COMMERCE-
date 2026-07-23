@@ -1,27 +1,30 @@
 # 🛒 E-Commerce Backend API (Django + DRF + MySQL)
 
-A **RESTful E-Commerce Backend API** built using **Django**, **Django REST Framework (DRF)**, and **MySQL**. The project provides APIs for user authentication, product management, shopping carts, and order processing. Alongside the REST APIs, the project also includes **Django Views, HTML templates, and static files** to render basic frontend pages for product browsing and management. All API endpoints were tested and validated using **Postman**.
+A **RESTful E-Commerce Backend API** built using **Django**, **Django REST Framework (DRF)**, and **MySQL**. The project provides secure APIs for user management, product catalog, shopping cart, and order processing. It supports CRUD operations, search, filtering, pagination, and automatic price calculations. All APIs were developed and tested using **Postman**.
 
 ---
 
 # 📁 Project Structure
 
 ```text
-ecommerce_backend/
-├── ecommerce/                 # Django project settings
+backend/
+├── product/
+│   ├── migrations/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── routers.py
+│   ├── serializers.py
+│   ├── tests.py
+│   └── viewsets.py
+│
+├── shopverse/
+│   ├── __init__.py
+│   ├── asgi.py
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
-│
-├── store/                     # Main application
-│   ├── models.py              # Database models
-│   ├── serializers.py         # DRF serializers
-│   ├── views.py               # API views & Django template views
-│   ├── urls.py                # URL routing
-│   ├── admin.py               # Django admin configuration
-│   ├── templates/             # HTML templates
-│   ├── static/                # CSS, JavaScript & Images
-│   └── migrations/            # Database migrations
 │
 ├── manage.py
 ├── requirements.txt
@@ -32,29 +35,44 @@ ecommerce_backend/
 
 # 🚀 Features
 
-* 👤 User Authentication using Django's built-in User Model
-* 📦 Complete Product CRUD Operations
-* 🗂️ Category Management
-* 🛒 Shopping Cart with Quantity Management
-* 📋 Order & Order Item Management
-* 💰 Automatic Discount and Final Price Calculation
-* 🗄️ MySQL Database Integration
-* 🔗 RESTful APIs developed using Django REST Framework
-* 🌐 Server-rendered frontend pages using Django Views and HTML Templates
-* 🎨 Static file management for CSS, JavaScript, and Images
-* 🧪 API Testing and Validation using Postman
-* 🛠️ Django Admin Panel for easy data management
+- 👤 User Registration & Authentication
+- 📦 Complete Product CRUD Operations
+- 🗂️ Category Management
+- 🛒 Shopping Cart Management
+- 📋 Order & Order Item Management
+- 💰 Automatic Discount, Total Price & Final Price Calculations
+- 🗄️ MySQL Database Integration
+- 🔗 RESTful APIs using Django REST Framework
+- ⚡ ModelSerializers for JSON Serialization
+- 🔄 RESTful CRUD APIs using DRF ModelViewSets & Routers
+- 🔍 Product Search using DRF SearchFilter
+- 🎯 Product Filtering using DjangoFilterBackend
+- 📄 Pagination for Efficient API Responses
+- 🧪 API Development & Testing using Postman
+- 🛠️ Django Admin Panel
+
+---
+
+# 📌 API Capabilities
+
+- 👤 User Registration & Authentication
+- 📦 CRUD Operations
+- 🔄 JSON Serialization
+- 🔍 Search
+- 🎯 Filtering
+- 📄 Pagination
+- 🔗 Foreign Key Relationships
+- 🧮 Computed Properties (`final_price`, `total_price`)
 
 ---
 
 # 🛠️ Tech Stack
 
-* Python
-* Django
-* Django REST Framework (DRF)
-* MySQL
-* Postman
-* Django Template Engine
+- Python
+- Django
+- Django REST Framework (DRF)
+- MySQL
+- Postman
 
 ---
 
@@ -62,58 +80,117 @@ ecommerce_backend/
 
 ### Category
 
-* Stores product categories.
+Stores product categories.
 
-### Product
-
-* Product title
-* Description
-* Original price
-* Discount percentage
-* Automatically calculated final price
-* Linked category
-
-### Cart
-
-* User's shopping cart.
-
-### CartItem
-
-* Product
-* Quantity
-* Total price
-
-### Order
-
-* User
-* Order status
-* Order date
-
-### OrderItem
-
-* Ordered product
-* Quantity
-* Final price
+**Fields**
+- Category Name
 
 ---
 
-# 🔗 API Endpoints
+### Product
 
-| Endpoint       | Description              |
-| -------------- | ------------------------ |
-| `/categories/` | Category CRUD operations |
-| `/products/`   | Product CRUD operations  |
-| `/cart/`       | Shopping cart management |
-| `/cartitems/`  | Manage cart items        |
-| `/orders/`     | Create and manage orders |
-| `/orderitems/` | View ordered products    |
+Stores product information.
+
+**Fields**
+- Title
+- Description
+- Price
+- Discount Percentage
+- Category
+
+**Computed Property**
+- Final Price
+
+---
+
+### Cart
+
+Represents a user's shopping cart.
+
+**Fields**
+- User
+
+---
+
+### CartItem
+
+Represents products added to the shopping cart.
+
+**Fields**
+- Cart
+- Product
+- Quantity
+
+**Computed Property**
+- Total Price
+
+---
+
+### Order
+
+Stores order information.
+
+**Fields**
+- User
+- Order Status
+
+---
+
+### OrderItem
+
+Stores ordered products.
+
+**Fields**
+- Order
+- Product
+- Quantity
+- Discount
+
+**Computed Properties**
+- Total Price
+- Final Price
+
+---
+
+# 🔗 Database Relationships
+
+```text
+Category
+   │
+   └──────< Product
+
+User
+   │
+   └──────< Cart
+                │
+                └──────< CartItem
+
+User
+   │
+   └──────< Order
+                 │
+                 └──────< OrderItem
+```
+
+---
+
+# 🌐 API Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `/categories/` | Category CRUD Operations |
+| `/products/` | Product CRUD Operations |
+| `/cart/` | Shopping Cart Management |
+| `/cartitems/` | Manage Cart Items |
+| `/orders/` | Order Management |
+| `/orderitems/` | Order Item Management |
 
 ---
 
 # ▶️ Application Workflow
 
 ```text
-User Registers / Login
+User Registration / Login
           │
           ▼
 Browse Categories
@@ -122,20 +199,45 @@ Browse Categories
 View Products
           │
           ▼
+Search & Filter Products
+          │
+          ▼
 Add Products to Cart
           │
           ▼
-Update Cart Quantity
+Update Cart Items
           │
           ▼
-Place Order
+Create Order
           │
           ▼
-Order Saved in MySQL Database
+Calculate Total & Final Price
+          │
+          ▼
+Store Order in MySQL Database
           │
           ▼
 View Order Details
 ```
 
+---
 
+# 🚀 Future Improvements
 
+- 🔐 JWT Authentication using Django REST Framework Simple JWT
+- 💳 Payment Gateway Integration (Stripe/Razorpay)
+- ❤️ Wishlist Management
+- ⭐ Product Reviews & Ratings
+- 📦 Order Tracking System
+- 📧 Email Notifications
+- 📈 Sales Analytics Dashboard
+- 📄 Invoice Generation (PDF)
+- 🏷️ Coupon & Promo Code Support
+- 📂 Product Image Uploads
+- 🌍 Role-Based Access Control (Admin, Seller & Customer)
+- 🐳 Docker Containerization
+- ☁️ Deployment on AWS, Render, or Railway
+- 🌐 Frontend Integration using React or Next.js
+- 📖 API Documentation using Swagger/OpenAPI
+- 🧪 Unit & Integration Testing
+- ⚡ Redis Caching for Improved Performance
